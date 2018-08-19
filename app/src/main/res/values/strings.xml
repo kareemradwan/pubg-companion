@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">PUBG Companion</string>
+
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="title_overview">Overview</string>
+    <string name="title_matches">Matches</string>
+    <string name="title_maps">Maps</string>
+    <string name="prompt_username">Enter PUBG Username</string>
+    <string name="prompt_search">Search</string>
+    <string name="search">Search</string>
+</resources>
