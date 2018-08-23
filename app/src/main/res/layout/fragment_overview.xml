@@ -1,9 +1,200 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.OverviewFragment">
+    android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/textView_playerName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Player Name" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/textView_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Game Mode"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/spinner_modes"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/spinner_modes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:entries="@array/modes_values"
+        android:prompt="@string/modes_prompt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_season"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Season"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_playerName" />
+
+    <Spinner
+        android:id="@+id/spinner_seasons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toEndOf="@+id/textView_season"
+        app:layout_constraintTop_toBottomOf="@+id/textView_playerName" />
+
+    <TextView
+        android:id="@+id/textView_games_label"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="Games"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/textView_wins_label"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_season" />
+
+    <TextView
+        android:id="@+id/textView_wins_label"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="Wins"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/textView_top10_label"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textView_games_label"
+        app:layout_constraintTop_toBottomOf="@+id/textView_season" />
+
+    <TextView
+        android:id="@+id/textView_top10_label"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="Top 10"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textView_wins_label"
+        app:layout_constraintTop_toBottomOf="@+id/textView_season" />
+
+    <TextView
+        android:id="@+id/textView_games"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="57"
+        android:textColor="@color/colorGames"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/textView_wins"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_games_label" />
+
+    <TextView
+        android:id="@+id/textView_wins"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="3"
+        android:textColor="@color/colorWins"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/textView_top10"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textView_games"
+        app:layout_constraintTop_toBottomOf="@+id/textView_wins_label" />
+
+    <TextView
+        android:id="@+id/textView_top10"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="7"
+        android:textColor="@color/colorTop10"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textView_wins"
+        app:layout_constraintTop_toBottomOf="@+id/textView_top10_label" />
+
+    <TextView
+        android:id="@+id/textView_kd_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="K/D"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@id/textView_games_label"
+        app:layout_constraintTop_toBottomOf="@+id/textView_games" />
+
+    <TextView
+        android:id="@+id/textView_avg_dmg_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="Avg. Damage"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@id/textView_top10_label"
+        app:layout_constraintTop_toBottomOf="@+id/textView_top10" />
+
+    <TextView
+        android:id="@+id/textView_kd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="2.35"
+        android:textColor="@color/colorKills"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/textView_kd_label"
+        app:layout_constraintTop_toBottomOf="@id/textView_kd_label" />
+
+    <TextView
+        android:id="@+id/textView_avg_dmg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="356"
+        android:textColor="@color/colorKills"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/textView_avg_dmg_label"
+        app:layout_constraintTop_toBottomOf="@id/textView_avg_dmg_label" />
+
+</android.support.constraint.ConstraintLayout>

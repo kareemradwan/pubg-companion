@@ -16,8 +16,8 @@ import butterknife.OnClick;
 
 public class UsernameDialogActivity extends AppCompatActivity {
 
-    @BindView(R.id.editText_username)
-    EditText editTextUsername;
+    @BindView(R.id.editText_playerName)
+    EditText editTextPlayerName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,9 +30,9 @@ public class UsernameDialogActivity extends AppCompatActivity {
 
     @OnClick(R.id.button_search)
     public void search(View view) {
-        String username = editTextUsername.getText().toString();
+        String playerName = editTextPlayerName.getText().toString();
         Intent intent = new Intent();
-        intent.putExtra("username", username);
+        intent.putExtra("player_name", playerName);
         setResult(RESULT_OK, intent);
         finish();
     }

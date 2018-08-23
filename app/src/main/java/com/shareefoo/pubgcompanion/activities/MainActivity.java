@@ -16,7 +16,10 @@ import android.widget.TextView;
 import com.shareefoo.pubgcompanion.R;
 import com.shareefoo.pubgcompanion.api.ApiClient;
 import com.shareefoo.pubgcompanion.api.ApiInterface;
+import com.shareefoo.pubgcompanion.data.SpManager;
 import com.shareefoo.pubgcompanion.dialogs.UsernameDialogActivity;
+import com.shareefoo.pubgcompanion.fragments.MapsFragment;
+import com.shareefoo.pubgcompanion.fragments.MatchesFragment;
 import com.shareefoo.pubgcompanion.fragments.OverviewFragment;
 import com.shareefoo.pubgcompanion.model.CollectionPlayersResponse;
 
@@ -42,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         toolbar = getSupportActionBar();
         toolbar.setTitle("Home");
 
+        loadFragment(new OverviewFragment());
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
@@ -57,16 +62,21 @@ public class MainActivity extends AppCompatActivity {
                     //
                     toolbar.setTitle("Overview");
                     fragment = new OverviewFragment();
+                    loadFragment(fragment);
                     return true;
 
                 case R.id.navigation_matches:
                     //
                     toolbar.setTitle("Matches");
+                    fragment = new MatchesFragment();
+                    loadFragment(fragment);
                     return true;
 
                 case R.id.navigation_maps:
                     //
                     toolbar.setTitle("Maps");
+                    fragment = new MapsFragment();
+                    loadFragment(fragment);
                     return true;
             }
             return false;
@@ -111,43 +121,53 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == SEARCH_DIALOG_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 //
-                String username = data.getStringExtra("username");
-
-                ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-                Call<CollectionPlayersResponse> playersResponseCall = apiService.getCollectionPlayersByNames(username);
-                playersResponseCall.enqueue(new Callback<CollectionPlayersResponse>() {
-                    @Override
-                    public void onResponse(Call<CollectionPlayersResponse> call, Response<CollectionPlayersResponse> response) {
-                        Log.d(TAG, "onResponse: " + response.toString());
-
-                        if (response.isSuccessful()) {
-
-                            CollectionPlayersResponse playersResponse = response.body();
-
-                            if (playersResponse != null) {
-
-                                String name = playersResponse.getPlayerData().get(0).getAttributes().getName();
-                                Log.d(TAG, "onResponse: Name: " + name);
-
-                            }
-
-                        } else {
-                            try {
-                                JSONObject errorObject = new JSONObject(response.errorBody().string());
-                                Log.e(TAG, "onResponse: " + errorObject.toString());
-                            } catch (Exception e) {
-                                Log.e(TAG, "onResponse: " + e.getMessage());
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<CollectionPlayersResponse> call, Throwable t) {
-                        Log.d(TAG, "onFailure: " + t.getMessage());
-                    }
-                });
-
+                String playerName = data.getStringExtra("player_name");
+                getPlayerByNameRequest(playerName);
             }
         }
     }
+
+    private void getPlayerByNameRequest(final String playerName) {
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        Call<CollectionPlayersResponse> playersResponseCall = apiService.getCollectionPlayersByNames(playerName);
+        playersResponseCall.enqueue(new Callback<CollectionPlayersResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<CollectionPlayersResponse> call, @NonNull Response<CollectionPlayersResponse> response) {
+                Log.d(TAG, "onResponse: " + response.toString());
+
+                if (response.isSuccessful()) {
+
+                    CollectionPlayersResponse playersResponse = response.body();
+
+                    if (playersResponse != null) {
+
+                        String playerId = playersResponse.getPlayerData().get(0).getId();
+                        String playerName = playersResponse.getPlayerData().get(0).getAttributes().getName();
+
+                        SpManager spManager = SpManager.getInstance(MainActivity.this);
+                        spManager.putBoolean("player_fetched", true);
+                        spManager.putString("player_id", playerId);
+                        spManager.putString("player_name", playerName);
+
+                        OverviewFragment overviewFragment = OverviewFragment.newInstance(playerId, playerName);
+                        loadFragment(overviewFragment);
+                    }
+
+                } else {
+                    try {
+                        JSONObject errorObject = new JSONObject(response.errorBody().string());
+                        Log.e(TAG, "onResponse: " + errorObject.toString());
+                    } catch (Exception e) {
+                        Log.e(TAG, "onResponse: " + e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<CollectionPlayersResponse> call, @NonNull Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+    }
+
 }

@@ -5,332 +5,332 @@ import com.google.gson.annotations.SerializedName;
 public class Squad {
 
     @SerializedName("assists")
-    private Integer assists;
+    private int assists;
 
     @SerializedName("boosts")
-    private Integer boosts;
+    private int boosts;
 
     @SerializedName("dBNOs")
-    private Integer dBNOs;
+    private int dBNOs;
 
     @SerializedName("dailyKills")
-    private Integer dailyKills;
+    private int dailyKills;
 
     @SerializedName("damageDealt")
-    private Integer damageDealt;
+    private double damageDealt;
 
     @SerializedName("days")
-    private Integer days;
+    private int days;
 
     @SerializedName("headshotKills")
-    private Integer headshotKills;
+    private int headshotKills;
 
     @SerializedName("heals")
-    private Integer heals;
+    private int heals;
 
     @SerializedName("killPoints")
-    private Integer killPoints;
+    private double killPoints;
 
     @SerializedName("kills")
-    private Integer kills;
+    private int kills;
 
     @SerializedName("longestKill")
-    private Integer longestKill;
+    private double longestKill;
 
     @SerializedName("longestTimeSurvived")
-    private Integer longestTimeSurvived;
+    private double longestTimeSurvived;
 
     @SerializedName("losses")
-    private Integer losses;
+    private int losses;
 
     @SerializedName("maxKillStreaks")
-    private Integer maxKillStreaks;
+    private int maxKillStreaks;
 
     @SerializedName("mostSurvivalTime")
-    private Integer mostSurvivalTime;
+    private double mostSurvivalTime;
 
     @SerializedName("revives")
-    private Integer revives;
+    private int revives;
 
     @SerializedName("rideDistance")
-    private Integer rideDistance;
+    private double rideDistance;
 
     @SerializedName("roadKills")
-    private Integer roadKills;
+    private int roadKills;
 
     @SerializedName("roundMostKills")
-    private Integer roundMostKills;
+    private int roundMostKills;
 
     @SerializedName("roundsPlayed")
-    private Integer roundsPlayed;
+    private int roundsPlayed;
 
     @SerializedName("suicides")
-    private Integer suicides;
+    private int suicides;
 
     @SerializedName("teamKills")
-    private Integer teamKills;
+    private int teamKills;
 
     @SerializedName("timeSurvived")
-    private Integer timeSurvived;
+    private double timeSurvived;
 
     @SerializedName("top10s")
-    private Integer top10s;
+    private int top10s;
 
     @SerializedName("vehicleDestroys")
-    private Integer vehicleDestroys;
+    private int vehicleDestroys;
 
     @SerializedName("walkDistance")
-    private Integer walkDistance;
+    private double walkDistance;
 
     @SerializedName("weaponsAcquired")
-    private Integer weaponsAcquired;
+    private int weaponsAcquired;
 
     @SerializedName("weeklyKills")
-    private Integer weeklyKills;
+    private int weeklyKills;
 
     @SerializedName("winPoints")
-    private Integer winPoints;
+    private double winPoints;
 
     @SerializedName("wins")
-    private Integer wins;
+    private int wins;
 
-    public Integer getAssists() {
+    public int getAssists() {
         return assists;
     }
 
-    public void setAssists(Integer assists) {
+    public void setAssists(int assists) {
         this.assists = assists;
     }
 
-    public Integer getBoosts() {
+    public int getBoosts() {
         return boosts;
     }
 
-    public void setBoosts(Integer boosts) {
+    public void setBoosts(int boosts) {
         this.boosts = boosts;
     }
 
-    public Integer getDBNOs() {
+    public int getDBNOs() {
         return dBNOs;
     }
 
-    public void setDBNOs(Integer dBNOs) {
+    public void setDBNOs(int dBNOs) {
         this.dBNOs = dBNOs;
     }
 
-    public Integer getDailyKills() {
+    public int getDailyKills() {
         return dailyKills;
     }
 
-    public void setDailyKills(Integer dailyKills) {
+    public void setDailyKills(int dailyKills) {
         this.dailyKills = dailyKills;
     }
 
-    public Integer getDamageDealt() {
+    public double getDamageDealt() {
         return damageDealt;
     }
 
-    public void setDamageDealt(Integer damageDealt) {
+    public void setDamageDealt(double damageDealt) {
         this.damageDealt = damageDealt;
     }
 
-    public Integer getDays() {
+    public int getDays() {
         return days;
     }
 
-    public void setDays(Integer days) {
+    public void setDays(int days) {
         this.days = days;
     }
 
-    public Integer getHeadshotKills() {
+    public int getHeadshotKills() {
         return headshotKills;
     }
 
-    public void setHeadshotKills(Integer headshotKills) {
+    public void setHeadshotKills(int headshotKills) {
         this.headshotKills = headshotKills;
     }
 
-    public Integer getHeals() {
+    public int getHeals() {
         return heals;
     }
 
-    public void setHeals(Integer heals) {
+    public void setHeals(int heals) {
         this.heals = heals;
     }
 
-    public Integer getKillPoints() {
+    public double getKillPoints() {
         return killPoints;
     }
 
-    public void setKillPoints(Integer killPoints) {
+    public void setKillPoints(double killPoints) {
         this.killPoints = killPoints;
     }
 
-    public Integer getKills() {
+    public int getKills() {
         return kills;
     }
 
-    public void setKills(Integer kills) {
+    public void setKills(int kills) {
         this.kills = kills;
     }
 
-    public Integer getLongestKill() {
+    public double getLongestKill() {
         return longestKill;
     }
 
-    public void setLongestKill(Integer longestKill) {
+    public void setLongestKill(double longestKill) {
         this.longestKill = longestKill;
     }
 
-    public Integer getLongestTimeSurvived() {
+    public double getLongestTimeSurvived() {
         return longestTimeSurvived;
     }
 
-    public void setLongestTimeSurvived(Integer longestTimeSurvived) {
+    public void setLongestTimeSurvived(double longestTimeSurvived) {
         this.longestTimeSurvived = longestTimeSurvived;
     }
 
-    public Integer getLosses() {
+    public int getLosses() {
         return losses;
     }
 
-    public void setLosses(Integer losses) {
+    public void setLosses(int losses) {
         this.losses = losses;
     }
 
-    public Integer getMaxKillStreaks() {
+    public int getMaxKillStreaks() {
         return maxKillStreaks;
     }
 
-    public void setMaxKillStreaks(Integer maxKillStreaks) {
+    public void setMaxKillStreaks(int maxKillStreaks) {
         this.maxKillStreaks = maxKillStreaks;
     }
 
-    public Integer getMostSurvivalTime() {
+    public double getMostSurvivalTime() {
         return mostSurvivalTime;
     }
 
-    public void setMostSurvivalTime(Integer mostSurvivalTime) {
+    public void setMostSurvivalTime(double mostSurvivalTime) {
         this.mostSurvivalTime = mostSurvivalTime;
     }
 
-    public Integer getRevives() {
+    public int getRevives() {
         return revives;
     }
 
-    public void setRevives(Integer revives) {
+    public void setRevives(int revives) {
         this.revives = revives;
     }
 
-    public Integer getRideDistance() {
+    public double getRideDistance() {
         return rideDistance;
     }
 
-    public void setRideDistance(Integer rideDistance) {
+    public void setRideDistance(double rideDistance) {
         this.rideDistance = rideDistance;
     }
 
-    public Integer getRoadKills() {
+    public int getRoadKills() {
         return roadKills;
     }
 
-    public void setRoadKills(Integer roadKills) {
+    public void setRoadKills(int roadKills) {
         this.roadKills = roadKills;
     }
 
-    public Integer getRoundMostKills() {
+    public int getRoundMostKills() {
         return roundMostKills;
     }
 
-    public void setRoundMostKills(Integer roundMostKills) {
+    public void setRoundMostKills(int roundMostKills) {
         this.roundMostKills = roundMostKills;
     }
 
-    public Integer getRoundsPlayed() {
+    public int getRoundsPlayed() {
         return roundsPlayed;
     }
 
-    public void setRoundsPlayed(Integer roundsPlayed) {
+    public void setRoundsPlayed(int roundsPlayed) {
         this.roundsPlayed = roundsPlayed;
     }
 
-    public Integer getSuicides() {
+    public int getSuicides() {
         return suicides;
     }
 
-    public void setSuicides(Integer suicides) {
+    public void setSuicides(int suicides) {
         this.suicides = suicides;
     }
 
-    public Integer getTeamKills() {
+    public int getTeamKills() {
         return teamKills;
     }
 
-    public void setTeamKills(Integer teamKills) {
+    public void setTeamKills(int teamKills) {
         this.teamKills = teamKills;
     }
 
-    public Integer getTimeSurvived() {
+    public double getTimeSurvived() {
         return timeSurvived;
     }
 
-    public void setTimeSurvived(Integer timeSurvived) {
+    public void setTimeSurvived(double timeSurvived) {
         this.timeSurvived = timeSurvived;
     }
 
-    public Integer getTop10s() {
+    public int getTop10s() {
         return top10s;
     }
 
-    public void setTop10s(Integer top10s) {
+    public void setTop10s(int top10s) {
         this.top10s = top10s;
     }
 
-    public Integer getVehicleDestroys() {
+    public int getVehicleDestroys() {
         return vehicleDestroys;
     }
 
-    public void setVehicleDestroys(Integer vehicleDestroys) {
+    public void setVehicleDestroys(int vehicleDestroys) {
         this.vehicleDestroys = vehicleDestroys;
     }
 
-    public Integer getWalkDistance() {
+    public double getWalkDistance() {
         return walkDistance;
     }
 
-    public void setWalkDistance(Integer walkDistance) {
+    public void setWalkDistance(double walkDistance) {
         this.walkDistance = walkDistance;
     }
 
-    public Integer getWeaponsAcquired() {
+    public int getWeaponsAcquired() {
         return weaponsAcquired;
     }
 
-    public void setWeaponsAcquired(Integer weaponsAcquired) {
+    public void setWeaponsAcquired(int weaponsAcquired) {
         this.weaponsAcquired = weaponsAcquired;
     }
 
-    public Integer getWeeklyKills() {
+    public int getWeeklyKills() {
         return weeklyKills;
     }
 
-    public void setWeeklyKills(Integer weeklyKills) {
+    public void setWeeklyKills(int weeklyKills) {
         this.weeklyKills = weeklyKills;
     }
 
-    public Integer getWinPoints() {
+    public double getWinPoints() {
         return winPoints;
     }
 
-    public void setWinPoints(Integer winPoints) {
+    public void setWinPoints(double winPoints) {
         this.winPoints = winPoints;
     }
 
-    public Integer getWins() {
+    public int getWins() {
         return wins;
     }
 
-    public void setWins(Integer wins) {
+    public void setWins(int wins) {
         this.wins = wins;
     }
 

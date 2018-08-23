@@ -6,7 +6,18 @@
     <string name="title_overview">Overview</string>
     <string name="title_matches">Matches</string>
     <string name="title_maps">Maps</string>
-    <string name="prompt_username">Enter PUBG Username</string>
+    <string name="prompt_player_name">Enter PUBG Name</string>
     <string name="prompt_search">Search</string>
     <string name="search">Search</string>
+
+    <string name="modes_prompt">Select Game Mode</string>
+
+    <string-array name="modes_values">
+        <item>Solo</item>
+        <item>Solo FPP</item>
+        <item>Duo</item>
+        <item>Duo FPP</item>
+        <item>Squad</item>
+        <item>Squad FPP</item>
+    </string-array>
 </resources>
