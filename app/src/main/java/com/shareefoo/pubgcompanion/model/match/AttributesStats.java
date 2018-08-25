@@ -47,7 +47,7 @@ public class AttributesStats {
     private int lastWinPoints;
 
     @SerializedName("longestKill")
-    private int longestKill;
+    private double longestKill;
 
     @SerializedName("mostDamage")
     private int mostDamage;
@@ -62,13 +62,13 @@ public class AttributesStats {
     private int revives;
 
     @SerializedName("rideDistance")
-    private int rideDistance;
+    private double rideDistance;
 
     @SerializedName("roadKills")
     private int roadKills;
 
     @SerializedName("swimDistance")
-    private int swimDistance;
+    private double swimDistance;
 
     @SerializedName("teamKills")
     private int teamKills;
@@ -212,11 +212,11 @@ public class AttributesStats {
         this.lastWinPoints = lastWinPoints;
     }
 
-    public int getLongestKill() {
+    public double getLongestKill() {
         return longestKill;
     }
 
-    public void setLongestKill(int longestKill) {
+    public void setLongestKill(double longestKill) {
         this.longestKill = longestKill;
     }
 
@@ -252,11 +252,11 @@ public class AttributesStats {
         this.revives = revives;
     }
 
-    public int getRideDistance() {
+    public double getRideDistance() {
         return rideDistance;
     }
 
-    public void setRideDistance(int rideDistance) {
+    public void setRideDistance(double rideDistance) {
         this.rideDistance = rideDistance;
     }
 
@@ -268,11 +268,11 @@ public class AttributesStats {
         this.roadKills = roadKills;
     }
 
-    public int getSwimDistance() {
+    public double getSwimDistance() {
         return swimDistance;
     }
 
-    public void setSwimDistance(int swimDistance) {
+    public void setSwimDistance(double swimDistance) {
         this.swimDistance = swimDistance;
     }
 

@@ -1,5 +1,6 @@
 package com.shareefoo.pubgcompanion.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +23,8 @@ import com.shareefoo.pubgcompanion.api.ApiInterface;
 import com.shareefoo.pubgcompanion.data.SpManager;
 import com.shareefoo.pubgcompanion.model.Duo;
 import com.shareefoo.pubgcompanion.model.DuoFpp;
+import com.shareefoo.pubgcompanion.model.MatchesSoloFPP;
+import com.shareefoo.pubgcompanion.model.PlayerSeasonMatchesData;
 import com.shareefoo.pubgcompanion.model.PlayerSeasonResponse;
 import com.shareefoo.pubgcompanion.model.SeasonData;
 import com.shareefoo.pubgcompanion.model.SeasonResponse;
@@ -79,6 +82,8 @@ public class OverviewFragment extends Fragment {
     private String mPlayerName;
 
     private SpManager spManager;
+
+    OnMatchesDataLoad mCallback;
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -259,8 +264,13 @@ public class OverviewFragment extends Fragment {
                             textViewGames.setText(String.valueOf(soloFpp.getWins() + soloFpp.getLosses()));
                             textViewWins.setText(String.valueOf(soloFpp.getWins()));
                             textViewTop10.setText(String.valueOf(soloFpp.getTop10s()));
-                            textViewKD.setText(String.valueOf(soloFpp.getKills() / soloFpp.getLosses()));
+                            textViewKD.setText(String.valueOf(soloFpp.getKills() / (1 + soloFpp.getLosses())));
                             textViewAvgDmg.setText(String.valueOf(soloFpp.getDamageDealt()));
+
+                            MatchesSoloFPP matches = playerSeasonResponse.getPlayerSeasonData().getRelationships().getMatchesSoloFPP();
+                            List<PlayerSeasonMatchesData> matchesData = matches.getData();
+
+                            mCallback.onMatchesLoad(matchesData);
 
                         } else if (mode.equals("Duo")) {
                             Duo duo = playerSeasonResponse.getPlayerSeasonData().getAttributes().getGameModeStats().getDuo();
@@ -294,5 +304,24 @@ public class OverviewFragment extends Fragment {
             }
         });
     }
+
+    public interface OnMatchesDataLoad {
+        public void onMatchesLoad(List<PlayerSeasonMatchesData> matchesData);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            mCallback = (OnMatchesDataLoad) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+    }
+
 
 }

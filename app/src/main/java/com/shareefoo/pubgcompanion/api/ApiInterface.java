@@ -4,6 +4,7 @@ import com.shareefoo.pubgcompanion.model.CollectionPlayersResponse;
 import com.shareefoo.pubgcompanion.model.PlayerSeasonResponse;
 import com.shareefoo.pubgcompanion.model.SeasonResponse;
 import com.shareefoo.pubgcompanion.model.SinglePlayerResponse;
+import com.shareefoo.pubgcompanion.model.match.MatchResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -16,9 +17,6 @@ import retrofit2.http.Query;
 
 public interface ApiInterface {
 
-    //    @GET("matches/{id}")
-//    Call<Match> getMatchById(@Path("id") String id);
-//
     @GET("players/{id}")
     Call<SinglePlayerResponse> getPlayerById(@Path("id") String id);
 
@@ -33,5 +31,8 @@ public interface ApiInterface {
 
     @GET("seasons")
     Call<SeasonResponse> getSeasons();
+
+    @GET("matches/{id}")
+    Call<MatchResponse> getMatchById(@Path("id") String id);
 
 }

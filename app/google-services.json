@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "544783266914",
+    "firebase_url": "https://pubg-companion-8572a.firebaseio.com",
+    "project_id": "pubg-companion-8572a",
+    "storage_bucket": "pubg-companion-8572a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:544783266914:android:679049233c5f4069",
+        "android_client_info": {
+          "package_name": "com.shareefoo.pubgcompanion"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "544783266914-1q3nvfmt5luagcmmdltbss6eg4b7emmp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shareefoo.pubgcompanion",
+            "certificate_hash": "2e15d2741e0a5d681e6105b8f6168cb11c6fe01b"
+          }
+        },
+        {
+          "client_id": "544783266914-vdm1katjft296j8v37cs3shh353d5okp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDovUCifotX06GqPIukohiSG6-1kdS5P9U"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "544783266914-vdm1katjft296j8v37cs3shh353d5okp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
