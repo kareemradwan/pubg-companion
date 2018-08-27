@@ -1,7 +1,10 @@
 package com.shareefoo.pubgcompanion.fragments;
 
 import android.app.Activity;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,13 +20,20 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.shareefoo.pubgcompanion.R;
 import com.shareefoo.pubgcompanion.api.ApiClient;
 import com.shareefoo.pubgcompanion.api.ApiInterface;
 import com.shareefoo.pubgcompanion.data.SpManager;
 import com.shareefoo.pubgcompanion.model.Duo;
 import com.shareefoo.pubgcompanion.model.DuoFpp;
+import com.shareefoo.pubgcompanion.model.MatchesDuo;
+import com.shareefoo.pubgcompanion.model.MatchesDuoFPP;
+import com.shareefoo.pubgcompanion.model.MatchesSolo;
 import com.shareefoo.pubgcompanion.model.MatchesSoloFPP;
+import com.shareefoo.pubgcompanion.model.MatchesSquad;
+import com.shareefoo.pubgcompanion.model.MatchesSquadFPP;
 import com.shareefoo.pubgcompanion.model.PlayerSeasonMatchesData;
 import com.shareefoo.pubgcompanion.model.PlayerSeasonResponse;
 import com.shareefoo.pubgcompanion.model.SeasonData;
@@ -32,6 +42,8 @@ import com.shareefoo.pubgcompanion.model.Solo;
 import com.shareefoo.pubgcompanion.model.SoloFpp;
 import com.shareefoo.pubgcompanion.model.Squad;
 import com.shareefoo.pubgcompanion.model.SquadFpp;
+import com.shareefoo.pubgcompanion.utils.NetworkUtils;
+import com.shareefoo.pubgcompanion.widget.PUBGAppWidget;
 
 import org.json.JSONObject;
 
@@ -75,8 +87,11 @@ public class OverviewFragment extends Fragment {
     @BindView(R.id.textView_avg_dmg)
     TextView textViewAvgDmg;
 
-    private static final String ARG_PLAYER_ID = "player_id";
-    private static final String ARG_PLAYER_NAME = "player_name";
+    @BindView(R.id.adView)
+    AdView adView;
+
+//    private static final String ARG_PLAYER_ID = "player_id";
+//    private static final String ARG_PLAYER_NAME = "player_name";
 
     private String mPlayerId;
     private String mPlayerName;
@@ -89,37 +104,35 @@ public class OverviewFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param playerId   Id of the player.
-     * @param playerName name of the player.
-     * @return A new instance of fragment OverviewFragment.
-     */
-    public static OverviewFragment newInstance(String playerId, String playerName) {
-        OverviewFragment fragment = new OverviewFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PLAYER_ID, playerId);
-        args.putString(ARG_PLAYER_NAME, playerName);
-        fragment.setArguments(args);
-        return fragment;
-    }
+//    /**
+//     * Use this factory method to create a new instance of
+//     * this fragment using the provided parameters.
+//     *
+//     * @param playerId   Id of the player.
+//     * @param playerName name of the player.
+//     * @return A new instance of fragment OverviewFragment.
+//     */
+//    public static OverviewFragment newInstance(String playerId, String playerName) {
+//        OverviewFragment fragment = new OverviewFragment();
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PLAYER_ID, playerId);
+//        args.putString(ARG_PLAYER_NAME, playerName);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        spManager = SpManager.getInstance(getContext());
-
-        if (getArguments() != null) {
-            mPlayerId = getArguments().getString(ARG_PLAYER_ID);
-            mPlayerName = getArguments().getString(ARG_PLAYER_NAME);
-
-        } else if (spManager.getBoolean("player_fetched", false)) {
-            mPlayerId = spManager.getString("player_id", "");
-            mPlayerName = spManager.getString("player_name", "");
-        }
+//        if (getArguments() != null) {
+//            mPlayerId = getArguments().getString(ARG_PLAYER_ID);
+//            mPlayerName = getArguments().getString(ARG_PLAYER_NAME);
+//
+//        } else if (spManager.getBoolean("player_fetched", false)) {
+//            mPlayerId = spManager.getString("player_id", "");
+//            mPlayerName = spManager.getString("player_name", "");
+//        }
     }
 
     @Override
@@ -127,6 +140,14 @@ public class OverviewFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_overview, container, false);
         ButterKnife.bind(this, rootView);
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
+        spManager = SpManager.getInstance(getContext());
+
+        mPlayerId = spManager.getString("player_id", "");
+        mPlayerName = spManager.getString("player_name", "");
 
         // Check if player name selected
         if (!TextUtils.isEmpty(mPlayerName)) {
@@ -168,77 +189,81 @@ public class OverviewFragment extends Fragment {
 
     private void getSeasons(final String mode) {
         //
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-        Call<SeasonResponse> seasonResponseCall = apiService.getSeasons();
-        seasonResponseCall.enqueue(new Callback<SeasonResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<SeasonResponse> call, @NonNull Response<SeasonResponse> response) {
-                Log.d(TAG, "onResponse: " + response.toString());
+        if (NetworkUtils.IsNetworkAvailable(getContext())) {
+            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+            Call<SeasonResponse> seasonResponseCall = apiService.getSeasons();
+            seasonResponseCall.enqueue(new Callback<SeasonResponse>() {
+                @Override
+                public void onResponse(@NonNull Call<SeasonResponse> call, @NonNull Response<SeasonResponse> response) {
+                    Log.d(TAG, "onResponse: " + response.toString());
 
-                if (response.isSuccessful()) {
+                    if (response.isSuccessful()) {
 
-                    SeasonResponse seasonResponse = response.body();
+                        SeasonResponse seasonResponse = response.body();
 
-                    if (seasonResponse != null) {
+                        if (seasonResponse != null) {
 
-                        List<String> seasonsNames = new ArrayList<>();
+                            List<String> seasonsNames = new ArrayList<>();
 
-                        final List<SeasonData> seasonDataList = seasonResponse.getSeasonData();
-                        for (SeasonData seasonData : seasonDataList) {
-                            String id = seasonData.getId();
-                            int startIndex = id.lastIndexOf(".");
-                            String seasonName = id.substring(startIndex + 1, id.length());
-                            seasonsNames.add(seasonName);
-                        }
+                            final List<SeasonData> seasonDataList = seasonResponse.getSeasonData();
+                            for (SeasonData seasonData : seasonDataList) {
+                                String id = seasonData.getId();
+                                int startIndex = id.lastIndexOf(".");
+                                String seasonName = id.substring(startIndex + 1, id.length());
+                                seasonsNames.add(seasonName);
+                            }
 
-                        Collections.reverse(seasonsNames);
+                            Collections.reverse(seasonsNames);
 
-                        Collections.reverse(seasonDataList);
+                            Collections.reverse(seasonDataList);
 
-                        ArrayAdapter<String> seasonsAdapter = new ArrayAdapter<String>(getContext(),
-                                R.layout.simple_spinner_item, seasonsNames);
-                        seasonsAdapter.setDropDownViewResource(R.layout.simple_spinner_item);
+                            ArrayAdapter<String> seasonsAdapter = new ArrayAdapter<String>(getContext(),
+                                    R.layout.simple_spinner_item, seasonsNames);
+                            seasonsAdapter.setDropDownViewResource(R.layout.simple_spinner_item);
 
-                        spinnerSeasons.setAdapter(seasonsAdapter);
-                        spinnerSeasons.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                int selectedIndex = adapterView.getSelectedItemPosition();
+                            spinnerSeasons.setAdapter(seasonsAdapter);
+                            spinnerSeasons.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                    int selectedIndex = adapterView.getSelectedItemPosition();
 
-                                String seasonsId = null;
+                                    String seasonsId = null;
 
-                                for (int j = 0; j < seasonDataList.size(); j++) {
-                                    if (selectedIndex == j) {
-                                        seasonsId = seasonDataList.get(j).getId();
+                                    for (int j = 0; j < seasonDataList.size(); j++) {
+                                        if (selectedIndex == j) {
+                                            seasonsId = seasonDataList.get(j).getId();
+                                        }
                                     }
+
+                                    getPlayerSeason(mPlayerId, seasonsId, mode);
                                 }
 
-                                getPlayerSeason(mPlayerId, seasonsId, mode);
-                            }
+                                @Override
+                                public void onNothingSelected(AdapterView<?> adapterView) {
+                                    //
+                                }
+                            });
 
-                            @Override
-                            public void onNothingSelected(AdapterView<?> adapterView) {
+                        }
 
-                            }
-                        });
-
-                    }
-
-                } else {
-                    try {
-                        JSONObject errorObject = new JSONObject(response.errorBody().string());
-                        Log.e(TAG, "onResponse: " + errorObject.toString());
-                    } catch (Exception e) {
-                        Log.e(TAG, "onResponse: " + e.getMessage());
+                    } else {
+                        try {
+                            JSONObject errorObject = new JSONObject(response.errorBody().string());
+                            Log.e(TAG, "onResponse: " + errorObject.toString());
+                        } catch (Exception e) {
+                            Log.e(TAG, "onResponse: " + e.getMessage());
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onFailure(@NonNull Call<SeasonResponse> call, @NonNull Throwable t) {
-                Log.d(TAG, "onFailure: " + t.getMessage());
-            }
-        });
+                @Override
+                public void onFailure(@NonNull Call<SeasonResponse> call, @NonNull Throwable t) {
+                    Log.d(TAG, "onFailure: " + t.getMessage());
+                }
+            });
+        } else {
+            Toast.makeText(getContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
+        }
     }
 
     private void getPlayerSeason(String playerId, String seasonId, final String mode) {
@@ -255,37 +280,126 @@ public class OverviewFragment extends Fragment {
 
                     if (playerSeasonResponse != null) {
 
+                        List<PlayerSeasonMatchesData> matchesData;
+
+                        // TODO: refactor code (reduce duplication)
+
+                        int games = 0;
+                        int wins = 0;
+                        int top10 = 0;
+                        double kd = 0;
+                        double dmg = 0;
+
                         if (mode.equals("Solo")) {
                             Solo solo = playerSeasonResponse.getPlayerSeasonData().getAttributes().getGameModeStats().getSolo();
+
+                            games = solo.getWins() + solo.getLosses();
+                            wins = solo.getWins();
+                            top10 = solo.getTop10s();
+                            kd = solo.getKills() / (1 + solo.getLosses());
+                            dmg = solo.getDamageDealt();
+
+                            MatchesSolo matches = playerSeasonResponse.getPlayerSeasonData().getRelationships().getMatchesSolo();
+                            matchesData = matches.getData();
+
+                            mCallback.onMatchesLoad(matchesData);
 
                         } else if (mode.equals("Solo FPP")) {
                             SoloFpp soloFpp = playerSeasonResponse.getPlayerSeasonData().getAttributes().getGameModeStats().getSoloFpp();
 
-                            textViewGames.setText(String.valueOf(soloFpp.getWins() + soloFpp.getLosses()));
-                            textViewWins.setText(String.valueOf(soloFpp.getWins()));
-                            textViewTop10.setText(String.valueOf(soloFpp.getTop10s()));
-                            textViewKD.setText(String.valueOf(soloFpp.getKills() / (1 + soloFpp.getLosses())));
-                            textViewAvgDmg.setText(String.valueOf(soloFpp.getDamageDealt()));
+                            games = soloFpp.getWins() + soloFpp.getLosses();
+                            wins = soloFpp.getWins();
+                            top10 = soloFpp.getTop10s();
+                            kd = soloFpp.getKills() / (1 + soloFpp.getLosses());
+                            dmg = soloFpp.getDamageDealt();
 
                             MatchesSoloFPP matches = playerSeasonResponse.getPlayerSeasonData().getRelationships().getMatchesSoloFPP();
-                            List<PlayerSeasonMatchesData> matchesData = matches.getData();
+                            matchesData = matches.getData();
 
                             mCallback.onMatchesLoad(matchesData);
 
                         } else if (mode.equals("Duo")) {
                             Duo duo = playerSeasonResponse.getPlayerSeasonData().getAttributes().getGameModeStats().getDuo();
 
+                            games = duo.getWins() + duo.getLosses();
+                            wins = duo.getWins();
+                            top10 = duo.getTop10s();
+                            kd = duo.getKills() / (1 + duo.getLosses());
+                            dmg = duo.getDamageDealt();
+
+                            MatchesDuo matches = playerSeasonResponse.getPlayerSeasonData().getRelationships().getMatchesDuo();
+                            matchesData = matches.getData();
+
+                            mCallback.onMatchesLoad(matchesData);
+
                         } else if (mode.equals("Duo FPP")) {
                             DuoFpp duoFpp = playerSeasonResponse.getPlayerSeasonData().getAttributes().getGameModeStats().getDuoFpp();
+
+                            games = duoFpp.getWins() + duoFpp.getLosses();
+                            wins = duoFpp.getWins();
+                            top10 = duoFpp.getTop10s();
+                            kd = duoFpp.getKills() / (1 + duoFpp.getLosses());
+                            dmg = duoFpp.getDamageDealt();
+
+                            MatchesDuoFPP matches = playerSeasonResponse.getPlayerSeasonData().getRelationships().getMatchesDuoFPP();
+                            matchesData = matches.getData();
+
+                            mCallback.onMatchesLoad(matchesData);
 
                         } else if (mode.equals("Squad")) {
                             Squad squad = playerSeasonResponse.getPlayerSeasonData().getAttributes().getGameModeStats().getSquad();
 
+                            games = squad.getWins() + squad.getLosses();
+                            wins = squad.getWins();
+                            top10 = squad.getTop10s();
+                            kd = squad.getKills() / (1 + squad.getLosses());
+                            dmg = squad.getDamageDealt();
+
+                            MatchesSquad matches = playerSeasonResponse.getPlayerSeasonData().getRelationships().getMatchesSquad();
+                            matchesData = matches.getData();
+
+                            mCallback.onMatchesLoad(matchesData);
+
                         } else if (mode.equals("Squad FPP")) {
                             SquadFpp squadFpp = playerSeasonResponse.getPlayerSeasonData().getAttributes().getGameModeStats().getSquadFpp();
 
+                            games = squadFpp.getWins() + squadFpp.getLosses();
+                            wins = squadFpp.getWins();
+                            top10 = squadFpp.getTop10s();
+                            kd = squadFpp.getKills() / (1 + squadFpp.getLosses());
+                            dmg = squadFpp.getDamageDealt();
+
+                            MatchesSquadFPP matches = playerSeasonResponse.getPlayerSeasonData().getRelationships().getMatchesSquadFPP();
+                            matchesData = matches.getData();
+
+                            mCallback.onMatchesLoad(matchesData);
                         }
 
+                        textViewGames.setText(String.valueOf(games));
+                        textViewWins.setText(String.valueOf(wins));
+                        textViewTop10.setText(String.valueOf(top10));
+                        textViewKD.setText(String.valueOf(kd));
+                        textViewAvgDmg.setText(String.valueOf(dmg));
+
+                        spManager.putInt("no_games", games);
+                        spManager.putInt("no_wins", wins);
+                        spManager.putInt("no_top10", top10);
+
+                        // update the widget
+                        Intent intent = new Intent(getContext(), PUBGAppWidget.class);
+                        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+                        // Use an array and EXTRA_APPWIDGET_IDS instead of AppWidgetManager.EXTRA_APPWIDGET_ID,
+                        // since it seems the onUpdate() is only fired on that:
+                        int[] ids = AppWidgetManager.getInstance(getContext()).getAppWidgetIds(new ComponentName(getActivity(), PUBGAppWidget.class));
+                        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+                        getContext().sendBroadcast(intent);
+
+//                        Intent intent = new Intent(getContext(), PUBGAppWidget.class);
+//                        intent.setAction(PUBGAppWidget.ACTION_APPWIDGET);
+//                        intent.putExtra("games", 8);
+//                        intent.putExtra("wins", 1);
+//                        intent.putExtra("top10", 3);
+//                        getContext().sendBroadcast(intent);
                     }
 
                 } else {
@@ -323,5 +437,9 @@ public class OverviewFragment extends Fragment {
         }
     }
 
+//    @Override
+//    public void onSaveInstanceState(@NonNull Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//    }
 
 }

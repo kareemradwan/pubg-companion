@@ -37,5 +37,4 @@ public class UsernameDialogActivity extends AppCompatActivity {
         finish();
     }
 
-
 }

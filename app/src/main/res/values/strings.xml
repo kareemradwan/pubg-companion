@@ -6,11 +6,11 @@
     <string name="title_overview">Overview</string>
     <string name="title_matches">Matches</string>
     <string name="title_maps">Maps</string>
-    <string name="prompt_player_name">Enter PUBG Name</string>
+    <string name="prompt_player_name">Enter Your PUBG Name</string>
     <string name="prompt_search">Search</string>
 
     <string name="menu_search">Search</string>
-    <string name="menu_nearby_friends">Nearby Friends</string>
+    <string name="menu_nearby_friends">Nearby Players</string>
     <string name="menu_settings">Settings</string>
 
     <string name="modes_prompt">Select Game Mode</string>
@@ -23,5 +23,28 @@
         <item>Squad</item>
         <item>Squad FPP</item>
     </string-array>
+
     <string name="title_activity_nearby_friends">Nearby Friends</string>
+
+    <string name="no_connection">No Connection Available !</string>
+
+    <string name="admob_app_id">ca-app-pub-3194028862433939~1831163408</string>
+    <string name="admob_banner_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="map_sanhok">Sanhok</string>
+    <string name="map_miramar">Miramar</string>
+    <string name="map_erangel">Erangel</string>
+    <string name="mode">Mode</string>
+    <string name="season">Season</string>
+    <string name="games">Games</string>
+    <string name="wins">Wins</string>
+    <string name="top_10">Top 10</string>
+    <string name="kd">K/D</string>
+    <string name="avg_damage">Avg. Damage</string>
+    <string name="date">2 days ago</string>
+    <string name="distance">Distance</string>
+    <string name="damage">Damage</string>
+    <string name="kills">Kills</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+
 </resources>

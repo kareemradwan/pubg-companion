@@ -10,7 +10,7 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_nearby_friends"
+        android:id="@+id/action_nearby_players"
         android:orderInCategory="200"
         android:title="@string/menu_nearby_friends"
         app:showAsAction="never" />

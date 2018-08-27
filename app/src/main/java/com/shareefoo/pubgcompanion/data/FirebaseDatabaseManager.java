@@ -9,6 +9,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+// Test class
+// TODO: Refactor/Remove
 public class FirebaseDatabaseManager {
 
     public void writeToDatabase() {

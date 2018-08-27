@@ -1,6 +1,7 @@
 package com.shareefoo.pubgcompanion.adapters;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.shareefoo.pubgcompanion.R;
 import com.shareefoo.pubgcompanion.model.match.AttributesStats;
+import com.shareefoo.pubgcompanion.provider.MatchContract;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -20,11 +22,13 @@ import butterknife.ButterKnife;
 public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> {
 
     private Context mContext;
-    private List<AttributesStats> mStats;
+    private Cursor mCursor;
 
-    public MatchAdapter(Context context, List<AttributesStats> stats) {
+//    private List<AttributesStats> mStats;
+
+    public MatchAdapter(Context context, Cursor cursor) {
         mContext = context;
-        mStats = stats;
+        mCursor = cursor;
     }
 
     @NonNull
@@ -43,11 +47,18 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // Get the data model based on position
-        AttributesStats stats = mStats.get(position);
+//        AttributesStats stats = mStats.get(position);
+
+        mCursor.moveToPosition(position);
+
+        int id = mCursor.getInt(mCursor.getColumnIndex(MatchContract.MatchEntry._ID));
+        int rank = mCursor.getInt(mCursor.getColumnIndex(MatchContract.MatchEntry.COLUMN_PLACEMENT));
+        int kills = mCursor.getInt(mCursor.getColumnIndex(MatchContract.MatchEntry.COLUMN_KILLS));
+        double damage = mCursor.getDouble(mCursor.getColumnIndex(MatchContract.MatchEntry.COLUMN_DAMAGE));
+        double distance = mCursor.getDouble(mCursor.getColumnIndex(MatchContract.MatchEntry.COLUMN_DISTANCE));
 
         DecimalFormat df = new DecimalFormat("###.##");
 
-        int rank = stats.getRank();
         String placement = "#" + rank;
 
         if (rank == 1) {
@@ -60,14 +71,26 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
 
         // Set item views based on views and data model
         holder.textViewPlacements.setText(placement);
-        holder.textViewKills.setText(String.valueOf(stats.getKills()));
-        holder.textViewDamage.setText(df.format(stats.getDamageDealt()));
-        holder.textViewDistance.setText(df.format(stats.getWalkDistance()));
+        holder.textViewKills.setText(String.valueOf(kills));
+        holder.textViewDamage.setText(df.format(damage));
+        holder.textViewDistance.setText(df.format(distance) + " km");
     }
 
     @Override
     public int getItemCount() {
-        return mStats.size();
+        if (mCursor == null) return 0;
+        return mCursor.getCount();
+    }
+
+    public void swapCursor(Cursor newCursor) {
+        if (mCursor != null) {
+            mCursor.close();
+        }
+        mCursor = newCursor;
+        if (mCursor != null) {
+            // Force the RecyclerView to refresh
+            this.notifyDataSetChanged();
+        }
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
