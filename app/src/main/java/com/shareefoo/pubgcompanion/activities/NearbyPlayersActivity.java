@@ -58,9 +58,9 @@ import com.shareefoo.pubgcompanion.model.map.PlayerLocation;
 import java.text.DateFormat;
 import java.util.Date;
 
-public class NearbyPlayersActivity extends FragmentActivity implements OnMapReadyCallback {
+import timber.log.Timber;
 
-    public static final String TAG = NearbyPlayersActivity.class.getSimpleName();
+public class NearbyPlayersActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
@@ -94,7 +94,6 @@ public class NearbyPlayersActivity extends FragmentActivity implements OnMapRead
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nearby_players);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -107,7 +106,6 @@ public class NearbyPlayersActivity extends FragmentActivity implements OnMapRead
         mPlayersReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onDataChange");
                 PlayerLocation playerLocation = dataSnapshot.getValue(PlayerLocation.class);
                 if (playerLocation != null) {
                     LatLng myLocation = new LatLng(playerLocation.playerLatitude, playerLocation.playerLongitude);
@@ -118,7 +116,7 @@ public class NearbyPlayersActivity extends FragmentActivity implements OnMapRead
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Getting Post failed, log a message
-                Log.w(TAG, "onCancelled", databaseError.toException());
+                Timber.w(databaseError.toException(), "onCancelled");
                 Toast.makeText(NearbyPlayersActivity.this, "Failed to load players.", Toast.LENGTH_LONG).show();
             }
         });
@@ -131,7 +129,7 @@ public class NearbyPlayersActivity extends FragmentActivity implements OnMapRead
                     @SuppressLint("MissingPermission")
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
-                        Log.d(TAG, "onCreate: Permission granted");
+                        Timber.d("onCreate: Permission granted");
 
                         mFusedLocationClient.getLastLocation()
                                 .addOnSuccessListener(NearbyPlayersActivity.this, new OnSuccessListener<Location>() {
@@ -139,18 +137,18 @@ public class NearbyPlayersActivity extends FragmentActivity implements OnMapRead
                                     public void onSuccess(Location location) {
                                         // Got last known location. In some rare situations this can be null.
                                         if (location != null) {
-                                            Log.d(TAG, "onSuccess: Latitude: " + location.getLatitude());
-                                            Log.d(TAG, "onSuccess: Longitude: " + location.getLongitude());
+                                            Timber.d("onSuccess: Latitude: %s", location.getLatitude());
+                                            Timber.d("onSuccess: Longitude: %s", location.getLongitude());
 
                                             LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
                                             mMap.addMarker(new MarkerOptions().position(myLocation).title("My Location"));
                                             mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
 
-                                            int beginIndex = spManager.getString("player_id", "").indexOf(".") + 1;
-                                            int endIndex = spManager.getString("player_id", "").length();
+                                            int beginIndex = spManager.getString(SpManager.KEY_PLAYER_ID, "").indexOf(".") + 1;
+                                            int endIndex = spManager.getString(SpManager.KEY_PLAYER_ID, "").length();
 
-                                            String playerId = spManager.getString("player_id", "").substring(beginIndex, endIndex);
-                                            String playerName = spManager.getString("player_name", "");
+                                            String playerId = spManager.getString(SpManager.KEY_PLAYER_ID, "").substring(beginIndex, endIndex);
+                                            String playerName = spManager.getString(SpManager.KEY_PLAYER_NAME, "");
 
                                             PlayerLocation playerLocation = new PlayerLocation(playerName, location.getLatitude(), location.getLongitude());
 
@@ -158,13 +156,13 @@ public class NearbyPlayersActivity extends FragmentActivity implements OnMapRead
                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
                                                         public void onSuccess(Void aVoid) {
-                                                            Log.d(TAG, "onSuccess: Data has been written successfully");
+                                                            Timber.d("onSuccess: Data has been written successfully");
                                                         }
                                                     })
                                                     .addOnFailureListener(new OnFailureListener() {
                                                         @Override
                                                         public void onFailure(@NonNull Exception e) {
-                                                            Log.d(TAG, "onFailure: Faild to write data");
+                                                            Timber.d("onFailure: Faild to write data");
                                                         }
                                                     });
                                         }
@@ -177,7 +175,7 @@ public class NearbyPlayersActivity extends FragmentActivity implements OnMapRead
 
                     @Override
                     public void onPermissionDenied(PermissionDeniedResponse response) {
-                        Log.d(TAG, "onCreate: Permission not granted");
+                        Timber.d("onCreate: Permission not granted");
 
                         if (response.isPermanentlyDenied()) {
                             // open device settings when the permission is denied permanently
@@ -207,12 +205,12 @@ public class NearbyPlayersActivity extends FragmentActivity implements OnMapRead
                 mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
 
                 if (mCurrentLocation != null) {
-                    Log.d(TAG, "onLocationResult: Latitude: " + mCurrentLocation.getLatitude());
-                    Log.d(TAG, "onLocationResult: Longitude: " + mCurrentLocation.getLongitude());
+                    Timber.d("onLocationResult: Latitude: %s", mCurrentLocation.getLatitude());
+                    Timber.d("onLocationResult: Longitude: %s", mCurrentLocation.getLongitude());
                 } else {
-                    Log.d(TAG, "onLocationResult: mCurrentLocation is null");
+                    Timber.d("onLocationResult: mCurrentLocation is null");
                 }
-                Log.d(TAG, "onLocationResult: Last Update Time: " + mLastUpdateTime);
+                Timber.d("onLocationResult: Last Update Time: %s", mLastUpdateTime);
             }
         };
 
@@ -294,7 +292,7 @@ public class NearbyPlayersActivity extends FragmentActivity implements OnMapRead
                     @SuppressLint("MissingPermission")
                     @Override
                     public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
-                        Log.i(TAG, "All location settings are satisfied.");
+                        Timber.i("All location settings are satisfied.");
 
                         Toast.makeText(getApplicationContext(), "Started location updates!", Toast.LENGTH_SHORT).show();
 
@@ -302,12 +300,12 @@ public class NearbyPlayersActivity extends FragmentActivity implements OnMapRead
                         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
 
                         if (mCurrentLocation != null) {
-                            Log.d(TAG, "onLocationResult: Latitude: " + mCurrentLocation.getLatitude());
-                            Log.d(TAG, "onLocationResult: Longitude: " + mCurrentLocation.getLongitude());
+                            Timber.d("onLocationResult: Latitude: " + mCurrentLocation.getLatitude());
+                            Timber.d("onLocationResult: Longitude: " + mCurrentLocation.getLongitude());
                         } else {
-                            Log.d(TAG, "onLocationResult: mCurrentLocation is null");
+                            Timber.d("onLocationResult: mCurrentLocation is null");
                         }
-                        Log.d(TAG, "onLocationResult: Last Update Time: " + mLastUpdateTime);
+                        Timber.d("onLocationResult: Last Update Time: " + mLastUpdateTime);
                     }
                 })
                 .addOnFailureListener(this, new OnFailureListener() {
@@ -316,32 +314,31 @@ public class NearbyPlayersActivity extends FragmentActivity implements OnMapRead
                         int statusCode = ((ApiException) e).getStatusCode();
                         switch (statusCode) {
                             case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                                Log.i(TAG, "Location settings are not satisfied. Attempting to upgrade " +
-                                        "location settings ");
+                                Timber.i("Location settings are not satisfied. Attempting to upgrade location settings ");
                                 try {
                                     // Show the dialog by calling startResolutionForResult(), and check the
                                     // result in onActivityResult().
                                     ResolvableApiException rae = (ResolvableApiException) e;
                                     rae.startResolutionForResult(NearbyPlayersActivity.this, REQUEST_CHECK_SETTINGS);
                                 } catch (IntentSender.SendIntentException sie) {
-                                    Log.i(TAG, "PendingIntent unable to execute request.");
+                                    Timber.i("PendingIntent unable to execute request.");
                                 }
                                 break;
                             case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                                 String errorMessage = "Location settings are inadequate, and cannot be " +
                                         "fixed here. Fix in Settings.";
-                                Log.e(TAG, errorMessage);
+                                Timber.e(errorMessage);
 
                                 Toast.makeText(NearbyPlayersActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                         }
 
                         if (mCurrentLocation != null) {
-                            Log.d(TAG, "onLocationResult: Latitude: " + mCurrentLocation.getLatitude());
-                            Log.d(TAG, "onLocationResult: Longitude: " + mCurrentLocation.getLongitude());
+                            Timber.d("onLocationResult: Latitude: %s", mCurrentLocation.getLatitude());
+                            Timber.d("onLocationResult: Longitude: %s", mCurrentLocation.getLongitude());
                         } else {
-                            Log.d(TAG, "onLocationResult: mCurrentLocation is null");
+                            Timber.d("onLocationResult: mCurrentLocation is null");
                         }
-                        Log.d(TAG, "onLocationResult: Last Update Time: " + mLastUpdateTime);
+                        Timber.d("onLocationResult: Last Update Time: %s", mLastUpdateTime);
                     }
                 });
     }
@@ -365,11 +362,11 @@ public class NearbyPlayersActivity extends FragmentActivity implements OnMapRead
             case REQUEST_CHECK_SETTINGS:
                 switch (resultCode) {
                     case Activity.RESULT_OK:
-                        Log.e(TAG, "User agreed to make required location settings changes.");
+                        Timber.e("User agreed to make required location settings changes.");
                         // Nothing to do. startLocationupdates() gets called in onResume again.
                         break;
                     case Activity.RESULT_CANCELED:
-                        Log.e(TAG, "User chose not to make required location settings changes.");
+                        Timber.e("User chose not to make required location settings changes.");
 //                        mRequestingLocationUpdates = false;
                         break;
                 }
@@ -406,12 +403,12 @@ public class NearbyPlayersActivity extends FragmentActivity implements OnMapRead
         }
 
         if (mCurrentLocation != null) {
-            Log.d(TAG, "onLocationResult: Latitude: " + mCurrentLocation.getLatitude());
-            Log.d(TAG, "onLocationResult: Longitude: " + mCurrentLocation.getLongitude());
+            Timber.d("onLocationResult: Latitude: " + mCurrentLocation.getLatitude());
+            Timber.d("onLocationResult: Longitude: " + mCurrentLocation.getLongitude());
         } else {
-            Log.d(TAG, "onLocationResult: mCurrentLocation is null");
+            Timber.d("onLocationResult: mCurrentLocation is null");
         }
-        Log.d(TAG, "onLocationResult: Last Update Time: " + mLastUpdateTime);
+        Timber.d("onLocationResult: Last Update Time: " + mLastUpdateTime);
 
     }
 

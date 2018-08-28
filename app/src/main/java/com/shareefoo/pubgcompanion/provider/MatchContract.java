@@ -15,8 +15,6 @@ public class MatchContract {
     // This is the path for the "matches" directory
     public static final String PATH_MATCHES = "matches";
 
-    public static final long INVALID_PLANT_ID = -1;
-
     public static final class MatchEntry implements BaseColumns {
 
         // TaskEntry content URI = base content URI + path

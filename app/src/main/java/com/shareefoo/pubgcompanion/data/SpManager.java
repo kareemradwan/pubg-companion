@@ -14,7 +14,8 @@ public class SpManager {
 
     private static final String SP_NAME = "pubg_prefs";
 
-    public static final String FIRST_RUN = "first_run";
+    public static final String KEY_PLAYER_ID = "player_id";
+    public static final String KEY_PLAYER_NAME = "player_name";
 
     private static SpManager instance = null;
 
@@ -69,10 +70,6 @@ public class SpManager {
 
     public boolean remove(String key) {
         return mSharedPreferences.edit().remove(key).commit();
-    }
-
-    public boolean logout() {
-        return mSharedPreferences.edit().clear().commit();
     }
 
 }

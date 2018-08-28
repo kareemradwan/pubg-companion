@@ -57,11 +57,10 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import timber.log.Timber;
 
 
 public class OverviewFragment extends Fragment {
-
-    public static final String TAG = OverviewFragment.class.getSimpleName();
 
     @BindView(R.id.textView_playerName)
     TextView textViewPlayerName;
@@ -90,15 +89,24 @@ public class OverviewFragment extends Fragment {
     @BindView(R.id.adView)
     AdView adView;
 
-//    private static final String ARG_PLAYER_ID = "player_id";
-//    private static final String ARG_PLAYER_NAME = "player_name";
-
     private String mPlayerId;
     private String mPlayerName;
 
     private SpManager spManager;
 
     OnMatchesDataLoad mCallback;
+
+    private int games;
+    private int wins;
+    private int top10;
+    private double kd;
+    private double dmg;
+
+//    private static final String KEY_GAMES = "key_games";
+//    private static final String KEY_WINS = "key_wins";
+//    private static final String KEY_TOP10 = "key_top10";
+//    private static final String KEY_KD = "key_kd";
+//    private static final String KEY_DMG = "key_dmg";
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -146,19 +154,33 @@ public class OverviewFragment extends Fragment {
 
         spManager = SpManager.getInstance(getContext());
 
-        mPlayerId = spManager.getString("player_id", "");
-        mPlayerName = spManager.getString("player_name", "");
+        mPlayerId = spManager.getString(SpManager.KEY_PLAYER_ID, "");
+        mPlayerName = spManager.getString(SpManager.KEY_PLAYER_NAME, "");
 
         // Check if player name selected
         if (!TextUtils.isEmpty(mPlayerName)) {
 
             textViewPlayerName.setText(mPlayerName);
 
-            spinnerModes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//            if (savedInstanceState != null) {
+//                games = savedInstanceState.getInt(KEY_GAMES);
+//                wins = savedInstanceState.getInt(KEY_WINS);
+//                top10 = savedInstanceState.getInt(KEY_TOP10);
+//                kd = savedInstanceState.getDouble(KEY_KD);
+//                dmg = savedInstanceState.getDouble(KEY_DMG);
+//
+//                textViewGames.setText(games);
+//                textViewWins.setText(wins);
+//                textViewTop10.setText(top10);
+//                textViewKD.setText(String.valueOf(kd));
+//                textViewAvgDmg.setText(String.valueOf(dmg));
+//
+//            } else {
 
-                    String mode = adapterView.getSelectedItem().toString();
+                spinnerModes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        String mode = adapterView.getSelectedItem().toString();
 
 //                    String mode;
 //
@@ -170,18 +192,20 @@ public class OverviewFragment extends Fragment {
 //
 //                    spManager.putString("game_mode", mode);
 
-                    getSeasons(mode);
-                }
+                        getSeasons(mode);
+                    }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
 
-                }
-            });
+                    }
+                });
+
+//            }
 
         } else {
             //
-
+            Toast.makeText(getContext(), R.string.prompt_player_search, Toast.LENGTH_LONG).show();
         }
 
         return rootView;
@@ -195,7 +219,7 @@ public class OverviewFragment extends Fragment {
             seasonResponseCall.enqueue(new Callback<SeasonResponse>() {
                 @Override
                 public void onResponse(@NonNull Call<SeasonResponse> call, @NonNull Response<SeasonResponse> response) {
-                    Log.d(TAG, "onResponse: " + response.toString());
+                    Timber.d("onResponse: %s", response.toString());
 
                     if (response.isSuccessful()) {
 
@@ -249,16 +273,16 @@ public class OverviewFragment extends Fragment {
                     } else {
                         try {
                             JSONObject errorObject = new JSONObject(response.errorBody().string());
-                            Log.e(TAG, "onResponse: " + errorObject.toString());
+                            Timber.e("onResponse: %s", errorObject.toString());
                         } catch (Exception e) {
-                            Log.e(TAG, "onResponse: " + e.getMessage());
+                            Timber.e("onResponse: %s", e.getMessage());
                         }
                     }
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<SeasonResponse> call, @NonNull Throwable t) {
-                    Log.d(TAG, "onFailure: " + t.getMessage());
+                    Timber.d("onFailure: %s", t.getMessage());
                 }
             });
         } else {
@@ -272,7 +296,7 @@ public class OverviewFragment extends Fragment {
         playerSeasonResponseCall.enqueue(new Callback<PlayerSeasonResponse>() {
             @Override
             public void onResponse(@NonNull Call<PlayerSeasonResponse> call, @NonNull Response<PlayerSeasonResponse> response) {
-                Log.d(TAG, "onResponse: " + response.toString());
+                Timber.d("onResponse: %s", response.toString());
 
                 if (response.isSuccessful()) {
 
@@ -283,12 +307,6 @@ public class OverviewFragment extends Fragment {
                         List<PlayerSeasonMatchesData> matchesData;
 
                         // TODO: refactor code (reduce duplication)
-
-                        int games = 0;
-                        int wins = 0;
-                        int top10 = 0;
-                        double kd = 0;
-                        double dmg = 0;
 
                         if (mode.equals("Solo")) {
                             Solo solo = playerSeasonResponse.getPlayerSeasonData().getAttributes().getGameModeStats().getSolo();
@@ -405,16 +423,16 @@ public class OverviewFragment extends Fragment {
                 } else {
                     try {
                         JSONObject errorObject = new JSONObject(response.errorBody().string());
-                        Log.e(TAG, "onResponse: " + errorObject.toString());
+                        Timber.e("onResponse: %s", errorObject.toString());
                     } catch (Exception e) {
-                        Log.e(TAG, "onResponse: " + e.getMessage());
+                        Timber.e("onResponse: %s", e.getMessage());
                     }
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<PlayerSeasonResponse> call, @NonNull Throwable t) {
-                Log.d(TAG, "onFailure: " + t.getMessage());
+                Timber.e("onFailure: %s", t.getMessage());
             }
         });
     }
@@ -437,9 +455,16 @@ public class OverviewFragment extends Fragment {
         }
     }
 
+    // TODO: save fragment state
 //    @Override
 //    public void onSaveInstanceState(@NonNull Bundle outState) {
 //        super.onSaveInstanceState(outState);
+//
+//        outState.putInt(KEY_GAMES, games);
+//        outState.putInt(KEY_WINS, wins);
+//        outState.putInt(KEY_TOP10, top10);
+//        outState.putDouble(KEY_KD, kd);
+//        outState.putDouble(KEY_DMG, dmg);
 //    }
 
 }

@@ -41,10 +41,9 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements OverviewFragment.OnMatchesDataLoad {
-
-    public static final String TAG = MainActivity.class.getSimpleName();
 
     private final int SEARCH_DIALOG_REQUEST_CODE = 100;
 
@@ -53,11 +52,14 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
 
     private SpManager spManager;
 
+    private final static String KEY_CURRENT_FRAGMENT = "current_fragment";
+
+    private Fragment fragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
@@ -66,12 +68,16 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
 
         spManager = SpManager.getInstance(this);
 
-        if (TextUtils.isEmpty(spManager.getString("player_name", ""))) {
+        if (TextUtils.isEmpty(spManager.getString(SpManager.KEY_PLAYER_NAME, ""))) {
             showSearchDialog();
         }
 
-//        getSupportActionBar().setTitle("Overview");
-        loadFragment(new OverviewFragment());
+        if (savedInstanceState != null) {
+            fragment = getSupportFragmentManager().getFragment(savedInstanceState, KEY_CURRENT_FRAGMENT);
+            loadFragment(fragment);
+        } else {
+            loadFragment(new OverviewFragment());
+        }
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -82,22 +88,18 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment fragment;
             switch (item.getItemId()) {
                 case R.id.navigation_overview:
-//                    getSupportActionBar().setTitle("Overview");
                     fragment = new OverviewFragment();
                     loadFragment(fragment);
                     return true;
 
                 case R.id.navigation_matches:
-//                    getSupportActionBar().setTitle("Matches");
                     fragment = new MatchesFragment();
                     loadFragment(fragment);
                     return true;
 
                 case R.id.navigation_maps:
-//                    getSupportActionBar().setTitle("Maps");
                     fragment = new MapsFragment();
                     loadFragment(fragment);
                     return true;
@@ -147,10 +149,10 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
         // TODO: make this option in separate Settings Activity
         if (!spManager.getBoolean("share_location", false)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Would you like to share your location with other players ?");
+            builder.setMessage(R.string.prompt_share_location);
             builder.setCancelable(false);
             builder.setPositiveButton(
-                    "Ok",
+                    R.string.prompt_ok,
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             spManager.putBoolean("share_location", true);
@@ -160,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
                     });
 
             builder.setNegativeButton(
-                    "Cancel",
+                    R.string.prompt_cancel,
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -181,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
         if (requestCode == SEARCH_DIALOG_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 //
-                String playerName = data.getStringExtra("player_name");
+                String playerName = data.getStringExtra(SpManager.KEY_PLAYER_NAME);
                 getPlayerByNameRequest(playerName);
             }
         }
@@ -194,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
             playersResponseCall.enqueue(new Callback<CollectionPlayersResponse>() {
                 @Override
                 public void onResponse(@NonNull Call<CollectionPlayersResponse> call, @NonNull Response<CollectionPlayersResponse> response) {
-                    Log.d(TAG, "onResponse: " + response.toString());
+                    Timber.d("onResponse: %s", response.toString());
 
                     if (response.isSuccessful()) {
 
@@ -206,8 +208,8 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
                             String playerName = playersResponse.getPlayerData().get(0).getAttributes().getName();
 
                             spManager.putBoolean("player_fetched", true);
-                            spManager.putString("player_id", playerId);
-                            spManager.putString("player_name", playerName);
+                            spManager.putString(SpManager.KEY_PLAYER_ID, playerId);
+                            spManager.putString(SpManager.KEY_PLAYER_NAME, playerName);
 
 //                        OverviewFragment overviewFragment = OverviewFragment.newInstance(playerId, playerName);
                             OverviewFragment overviewFragment = new OverviewFragment();
@@ -217,16 +219,16 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
                     } else {
                         try {
                             JSONObject errorObject = new JSONObject(response.errorBody().string());
-                            Log.e(TAG, "onResponse: " + errorObject.toString());
+                            Timber.e("onResponse: %s", errorObject.toString());
                         } catch (Exception e) {
-                            Log.e(TAG, "onResponse: " + e.getMessage());
+                            Timber.e("onResponse: %s", e.getMessage());
                         }
                     }
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<CollectionPlayersResponse> call, @NonNull Throwable t) {
-                    Log.d(TAG, "onFailure: " + t.getMessage());
+                    Timber.e("onFailure: %s", t.getMessage());
                 }
             });
         } else {
@@ -236,8 +238,14 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
 
     @Override
     public void onMatchesLoad(List<PlayerSeasonMatchesData> matchesData) {
-        Log.d(TAG, "onMatchesLoad: ");
         MatchesFragment.matchesData = matchesData;
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //Save the fragment's instance
+        getSupportFragmentManager().putFragment(outState, KEY_CURRENT_FRAGMENT, fragment);
+    }
 }

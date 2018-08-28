@@ -43,6 +43,8 @@
     <string name="damage">Damage</string>
     <string name="kills">Kills</string>
 
+    <string name="game_mode">Game mode</string>
+
     <string name="default_value">0</string>
 
     <string name="teams_number">/100</string>
@@ -52,5 +54,9 @@
 
     <string name="admob_app_id">ca-app-pub-3194028862433939~1831163408</string>
     <string name="admob_banner_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="prompt_share_location">Would you like to share your location with other players ?</string>
+    <string name="prompt_ok">OK</string>
+    <string name="prompt_cancel">Cancel</string>
+    <string name="prompt_player_search">Enter a player name to search</string>
 
 </resources>

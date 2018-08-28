@@ -9,6 +9,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import timber.log.Timber;
+
 // Test class
 // TODO: Refactor/Remove
 public class FirebaseDatabaseManager {
@@ -28,13 +30,13 @@ public class FirebaseDatabaseManager {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 String value = dataSnapshot.getValue(String.class);
-                Log.d("Firebase", "Value is: " + value);
+                Timber.d("Value is: " + value);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Failed to read value
-                Log.w("Firebase", "Failed to read value.", databaseError.toException());
+                Timber.tag("Firebase").w(databaseError.toException(), "Failed to read value.");
 
             }
         });

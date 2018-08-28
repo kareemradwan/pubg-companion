@@ -9,6 +9,7 @@ import android.view.Window;
 import android.widget.EditText;
 
 import com.shareefoo.pubgcompanion.R;
+import com.shareefoo.pubgcompanion.data.SpManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +33,7 @@ public class UsernameDialogActivity extends AppCompatActivity {
     public void search(View view) {
         String playerName = editTextPlayerName.getText().toString();
         Intent intent = new Intent();
-        intent.putExtra("player_name", playerName);
+        intent.putExtra(SpManager.KEY_PLAYER_NAME, playerName);
         setResult(RESULT_OK, intent);
         finish();
     }

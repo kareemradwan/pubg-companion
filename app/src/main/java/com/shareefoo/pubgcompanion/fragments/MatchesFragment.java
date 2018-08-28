@@ -46,13 +46,12 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import timber.log.Timber;
 
 import static com.shareefoo.pubgcompanion.provider.MatchContract.BASE_CONTENT_URI;
 import static com.shareefoo.pubgcompanion.provider.MatchContract.PATH_MATCHES;
 
 public class MatchesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-
-    public static final String TAG = MatchesFragment.class.getSimpleName();
 
     @BindView(R.id.recyclerView_matches)
     RecyclerView recyclerViewMatches;
@@ -129,7 +128,7 @@ public class MatchesFragment extends Fragment implements LoaderManager.LoaderCal
 
             getActivity().getContentResolver().delete(MatchContract.MatchEntry.CONTENT_URI, null, null);
 
-            final String playerId = spManager.getString("player_id", "");
+            final String playerId = spManager.getString(SpManager.KEY_PLAYER_ID, "");
 
             if (matchesData != null && matchesData.size() > 0) {
 
@@ -148,7 +147,7 @@ public class MatchesFragment extends Fragment implements LoaderManager.LoaderCal
                     matchResponseCall.enqueue(new Callback<MatchResponse>() {
                         @Override
                         public void onResponse(@NonNull Call<MatchResponse> call, @NonNull Response<MatchResponse> response) {
-                            Log.d(TAG, "onResponse: " + response.toString());
+                            Timber.d("onResponse: " + response.toString());
 //                            progressBar.setVisibility(View.INVISIBLE);
 
                             if (response.isSuccessful()) {
@@ -200,16 +199,16 @@ public class MatchesFragment extends Fragment implements LoaderManager.LoaderCal
                             } else {
                                 try {
                                     JSONObject errorObject = new JSONObject(response.errorBody().string());
-                                    Log.e(TAG, "onResponse: " + errorObject.toString());
+                                    Timber.e("onResponse: %s", errorObject.toString());
                                 } catch (Exception e) {
-                                    Log.e(TAG, "onResponse: " + e.getMessage());
+                                    Timber.e("onResponse: %s", e.getMessage());
                                 }
                             }
                         }
 
                         @Override
                         public void onFailure(@NonNull Call<MatchResponse> call, @NonNull Throwable t) {
-                            Log.d(TAG, "onFailure: " + t.getMessage());
+                            Timber.e("onFailure: %s", t.getMessage());
 //                            progressBar.setVisibility(View.INVISIBLE);
                             refreshLayout.setRefreshing(true);
                         }
@@ -278,9 +277,17 @@ public class MatchesFragment extends Fragment implements LoaderManager.LoaderCal
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            Log.d(TAG, "onPostExecute: Data inserted successfully..");
+            Timber.d("onPostExecute: Data inserted successfully..");
         }
 
     }
+
+    // TODO: save fragment state
+//    @Override
+//    public void onSaveInstanceState(@NonNull Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//
+//        //
+//    }
 
 }
