@@ -28,6 +28,10 @@
 
     <string name="no_connection">No Connection Available !</string>
 
+    <string name="prompt_ok">OK</string>
+    <string name="prompt_cancel">Cancel</string>
+    <string name="prompt_player_search">Enter a player name to search</string>
+
     <string name="map_sanhok">Sanhok</string>
     <string name="map_miramar">Miramar</string>
     <string name="map_erangel">Erangel</string>
@@ -55,8 +59,5 @@
     <string name="admob_app_id">ca-app-pub-3194028862433939~1831163408</string>
     <string name="admob_banner_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="prompt_share_location">Would you like to share your location with other players ?</string>
-    <string name="prompt_ok">OK</string>
-    <string name="prompt_cancel">Cancel</string>
-    <string name="prompt_player_search">Enter a player name to search</string>
 
 </resources>

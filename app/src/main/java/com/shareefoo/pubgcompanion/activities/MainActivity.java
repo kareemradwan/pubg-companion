@@ -2,7 +2,6 @@ package com.shareefoo.pubgcompanion.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -12,19 +11,16 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.shareefoo.pubgcompanion.R;
 import com.shareefoo.pubgcompanion.api.ApiClient;
 import com.shareefoo.pubgcompanion.api.ApiInterface;
 import com.shareefoo.pubgcompanion.data.SpManager;
-import com.shareefoo.pubgcompanion.dialogs.UsernameDialogActivity;
+import com.shareefoo.pubgcompanion.dialogs.PlayerNameDialogActivity;
 import com.shareefoo.pubgcompanion.fragments.MapsFragment;
 import com.shareefoo.pubgcompanion.fragments.MatchesFragment;
 import com.shareefoo.pubgcompanion.fragments.OverviewFragment;
@@ -76,7 +72,8 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
             fragment = getSupportFragmentManager().getFragment(savedInstanceState, KEY_CURRENT_FRAGMENT);
             loadFragment(fragment);
         } else {
-            loadFragment(new OverviewFragment());
+            fragment = new OverviewFragment();
+            loadFragment(fragment);
         }
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -141,7 +138,8 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
     }
 
     private void showSearchDialog() {
-        Intent intent = new Intent(this, UsernameDialogActivity.class);
+        // TODO: use dialog fragment instead of dialog activity
+        Intent intent = new Intent(this, PlayerNameDialogActivity.class);
         startActivityForResult(intent, SEARCH_DIALOG_REQUEST_CODE);
     }
 
@@ -211,7 +209,6 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
                             spManager.putString(SpManager.KEY_PLAYER_ID, playerId);
                             spManager.putString(SpManager.KEY_PLAYER_NAME, playerName);
 
-//                        OverviewFragment overviewFragment = OverviewFragment.newInstance(playerId, playerName);
                             OverviewFragment overviewFragment = new OverviewFragment();
                             loadFragment(overviewFragment);
                         }

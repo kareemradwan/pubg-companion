@@ -1,5 +1,6 @@
 package com.shareefoo.pubgcompanion.dialogs;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,7 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class UsernameDialogActivity extends AppCompatActivity {
+public class PlayerNameDialogActivity extends AppCompatActivity {
 
     @BindView(R.id.editText_playerName)
     EditText editTextPlayerName;

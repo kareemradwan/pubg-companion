@@ -23,7 +23,7 @@
         </activity>
 
         <activity
-            android:name=".dialogs.UsernameDialogActivity"
+            android:name=".dialogs.PlayerNameDialogActivity"
             android:excludeFromRecents="true"
             android:theme="@style/DialogActivityTheme" />
 
