@@ -38,7 +38,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="No recent matches"
+        android:text="@string/no_recent_matches"
         android:textSize="20sp"
         android:textStyle="bold"
         android:visibility="gone"

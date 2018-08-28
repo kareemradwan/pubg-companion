@@ -71,9 +71,10 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
 
         // Set item views based on views and data model
         holder.textViewPlacements.setText(placement);
+        holder.textViewPlacementLabel.setText(R.string.teams_number);
         holder.textViewKills.setText(String.valueOf(kills));
         holder.textViewDamage.setText(df.format(damage));
-        holder.textViewDistance.setText(df.format(distance) + " km");
+        holder.textViewDistance.setText(String.format("%s km", df.format(distance)));
     }
 
     @Override
@@ -97,6 +98,9 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
 
         @BindView(R.id.textView_placement)
         TextView textViewPlacements;
+
+        @BindView(R.id.textView_placement_label)
+        TextView textViewPlacementLabel;
 
         @BindView(R.id.textView_kills)
         TextView textViewKills;

@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:text="#10"
+            android:text="@string/default_value"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -34,8 +34,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@id/textView_placement"
+            android:layout_toEndOf="@id/textView_placement"
             android:layout_toRightOf="@id/textView_placement"
-            android:text="/30"
+            android:text="@string/default_value"
             android:textSize="16sp" />
 
         <TextView
@@ -43,9 +44,11 @@
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/textView_placement_label"
             android:layout_toRightOf="@id/textView_placement_label"
             android:gravity="center"
-            android:text="0"
+            android:text="@string/default_value"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -54,6 +57,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/textView_kills"
             android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/textView_placement_label"
             android:layout_toRightOf="@id/textView_placement_label"
             android:gravity="center"
             android:text="@string/kills"
@@ -64,9 +69,11 @@
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/textView_kills"
             android:layout_toRightOf="@id/textView_kills"
             android:gravity="center"
-            android:text="0"
+            android:text="@string/default_value"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -75,6 +82,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/textView_kills"
             android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/textView_kills"
             android:layout_toRightOf="@id/textView_kills"
             android:gravity="center"
             android:text="@string/damage"
@@ -85,9 +94,11 @@
             android:layout_width="85dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/textView_damage"
             android:layout_toRightOf="@id/textView_damage"
             android:gravity="center"
-            android:text="2323.12 km"
+            android:text="@string/default_value"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -96,6 +107,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/textView_kills"
             android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/textView_damage"
             android:layout_toRightOf="@id/textView_damage"
             android:gravity="center"
             android:text="@string/distance"

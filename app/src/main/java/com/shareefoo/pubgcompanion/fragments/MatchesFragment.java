@@ -1,8 +1,10 @@
 package com.shareefoo.pubgcompanion.fragments;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -178,13 +180,10 @@ public class MatchesFragment extends Fragment implements LoaderManager.LoaderCal
 
                                                     statsList.add(stats);
 
-                                                    // Insert new match into DB
-                                                    ContentValues contentValues = new ContentValues();
-                                                    contentValues.put(MatchContract.MatchEntry.COLUMN_PLACEMENT, placement);
-                                                    contentValues.put(MatchContract.MatchEntry.COLUMN_KILLS, kills);
-                                                    contentValues.put(MatchContract.MatchEntry.COLUMN_DAMAGE, damage);
-                                                    contentValues.put(MatchContract.MatchEntry.COLUMN_DISTANCE, distance);
-                                                    getActivity().getContentResolver().insert(MatchContract.MatchEntry.CONTENT_URI, contentValues);
+                                                    new InsertDataTask().execute(String.valueOf(placement),
+                                                            String.valueOf(kills),
+                                                            String.valueOf(damage),
+                                                            String.valueOf(distance));
                                                 }
 
                                             }
@@ -250,5 +249,38 @@ public class MatchesFragment extends Fragment implements LoaderManager.LoaderCal
 //    public void setMatchesData(List<PlayerSeasonMatchesData> matchesData) {
 //        this.matchesData = matchesData;
 //    }
+
+    private class InsertDataTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected Void doInBackground(String... strings) {
+
+            int placement = Integer.parseInt(strings[0]);
+            int kills = Integer.parseInt(strings[1]);
+            double damage = Double.parseDouble(strings[2]);
+            double distance = Double.parseDouble(strings[3]);
+
+            // Insert new match into DB
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MatchContract.MatchEntry.COLUMN_PLACEMENT, placement);
+            contentValues.put(MatchContract.MatchEntry.COLUMN_KILLS, kills);
+            contentValues.put(MatchContract.MatchEntry.COLUMN_DAMAGE, damage);
+            contentValues.put(MatchContract.MatchEntry.COLUMN_DISTANCE, distance);
+            getActivity().getContentResolver().insert(MatchContract.MatchEntry.CONTENT_URI, contentValues);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            Log.d(TAG, "onPostExecute: Data inserted successfully..");
+        }
+
+    }
 
 }

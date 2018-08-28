@@ -28,8 +28,6 @@
 
     <string name="no_connection">No Connection Available !</string>
 
-    <string name="admob_app_id">ca-app-pub-3194028862433939~1831163408</string>
-    <string name="admob_banner_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="map_sanhok">Sanhok</string>
     <string name="map_miramar">Miramar</string>
     <string name="map_erangel">Erangel</string>
@@ -44,7 +42,15 @@
     <string name="distance">Distance</string>
     <string name="damage">Damage</string>
     <string name="kills">Kills</string>
-    <string name="appwidget_text">EXAMPLE</string>
+
+    <string name="default_value">0</string>
+
+    <string name="teams_number">/100</string>
+
     <string name="add_widget">Add widget</string>
+    <string name="no_recent_matches">No recent matches</string>
+
+    <string name="admob_app_id">ca-app-pub-3194028862433939~1831163408</string>
+    <string name="admob_banner_id">ca-app-pub-3940256099942544/6300978111</string>
 
 </resources>
