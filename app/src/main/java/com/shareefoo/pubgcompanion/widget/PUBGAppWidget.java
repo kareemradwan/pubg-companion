@@ -69,6 +69,8 @@ public class PUBGAppWidget extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
+
+        //kareem radwan
     }
 
 //    @Override
